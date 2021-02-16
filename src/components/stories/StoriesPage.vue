@@ -1,22 +1,27 @@
 <template>
-  <div v-if="page && page.id">
-    <div
-      class="transform bg-white w-96 w-full h-196 origin-center"
-      :class="{ ['md:scale-95 opacity-30']: !active }"
-      @click="emitActive()"
-    >
-      <slot>
-        <template v-for="(item, i) in page.data" :key="i">
-          <template v-if="item.type === 'image'">
-            <div class="" :style="`background: url(${item.src})`"></div>
-          </template>
-          <template v-if="item.type === 'text'">
-            <div class="" v-html="item.value"></div>
-          </template>
-          <div></div>
+  <div
+    v-if="page && page.id"
+    class="relative transform bg-white w-96 w-full h-196 origin-center"
+    :class="{
+      ['scale-95 opacity-30 z-100']: !active,
+      ['z-90']: active,
+    }"
+    @click="emitActive()"
+  >
+    <slot>
+      <template v-for="(item, i) in page.data" :key="i">
+        <template v-if="item.type === 'image'">
+          <div
+            class="absolute w-full h-full"
+            :style="`background: url(${item.src})`"
+          ></div>
         </template>
-      </slot>
-    </div>
+        <template v-if="item.type === 'text'">
+          <div class="" v-html="item.value"></div>
+        </template>
+        <div></div>
+      </template>
+    </slot>
   </div>
 </template>
 

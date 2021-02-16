@@ -1,8 +1,8 @@
 <template>
   <div class="container py-5 flex flex-col min-h-screen">
     <header class="bg-gray-100 w-full h-20 rounded"></header>
-    <div class="pt-10 pb-5 flex space-x-5 max-w-full overflow-x-auto">
-      <StoriesArea />
+    <div class="pt-10 pb-5 max-w-full overflow-x-auto">
+      <StoriesArea class="flex space-x-5" />
     </div>
 
     <main
