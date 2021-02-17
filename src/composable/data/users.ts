@@ -74,4 +74,18 @@ export const pages: IPage[] = [
       { type: 'text', value: 'custom title' },
     ],
   },
+
+  {
+    id: '444',
+    name: 'page4',
+    createdAt: '16.02.2020',
+    data: [
+      {
+        type: 'image',
+        src:
+          'https://i.pinimg.com/736x/d7/fd/7e/d7fd7ef8bc9bf211fa61d9fd3a200d04.jpg',
+      },
+      { type: 'text', value: 'page 4' },
+    ],
+  },
 ]

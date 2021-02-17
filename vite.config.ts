@@ -11,11 +11,9 @@ export default defineConfig({
   },
   plugins: [
     vue(),
-    ...WindiCSS({
+    WindiCSS({
       safelist: '',
     }),
-    ViteComponents({
-      directoryAsNamespace: true,
-    }),
+    ViteComponents(),
   ],
 })

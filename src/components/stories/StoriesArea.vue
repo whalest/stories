@@ -1,22 +1,27 @@
 <template>
   <div>
-    <a
-      href=""
-      @click.prevent="showStory(item.id)"
-      v-for="(item, i) in items"
-      :key="i"
-    >
-      <StoriesUserPreview :name="item.name" :avatar="item.avatar" />
-    </a>
+    <div class="flex space-x-5">
+      <a
+        href=""
+        @click.prevent="showStory(item.id)"
+        v-for="(item, i) in items"
+        :key="i"
+      >
+        <StoriesUserPreview :name="item.name" :avatar="item.avatar" />
+      </a>
+    </div>
 
     <StoriesStory ref="headerStories">
-      <StoriesPage
-        v-for="(page, i) in pages"
-        :key="i"
-        :page="page"
-        :active="page.id === activePage"
-        @active="activePage = $event"
-      />
+      <template #page="{ classes }">
+        <StoriesPage
+          :class="[classes]"
+          v-for="(page, i) in pages"
+          :key="i"
+          :page="page"
+          :active="page.id === activePage"
+          @active="setActivePage"
+        />
+      </template>
     </StoriesStory>
   </div>
 </template>
@@ -39,7 +44,11 @@ export default defineComponent({
       headerStories.value?.open()
     }
 
-    return { activePage, items, pages, showStory, headerStories }
+    const setActivePage = (id: string, el: HTMLElement) => {
+      activePage.value = id
+    }
+
+    return { activePage, items, pages, showStory, headerStories, setActivePage }
   },
 })
 </script>

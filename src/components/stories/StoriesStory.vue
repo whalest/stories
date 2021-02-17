@@ -1,10 +1,14 @@
 <template>
-  <div v-if="show">
+  <div v-if="show" class="absolute inset-0 w-full h-full overflow-hidden">
     <div class="absolute inset-0 bg-black bg-opacity-70" @click="close()"></div>
     <div
-      class="absolute left-1/2 top-1/2 transform area -translate-x-1/2 -translate-y-1/2"
+      class="absolute w-full transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 area"
     >
-      <div class="flex"><slot></slot></div>
+      <div class="flex max-w-full overflow-x-auto snap snap-x">
+        <div class="px-5"></div>
+        <slot name="page" classes="flex-shrink-0 snap-center"></slot>
+        <div class="px-5"></div>
+      </div>
     </div>
   </div>
 </template>

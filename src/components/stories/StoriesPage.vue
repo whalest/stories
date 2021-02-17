@@ -1,33 +1,68 @@
 <template>
   <div
     v-if="page && page.id"
-    class="relative transform bg-white w-96 w-full h-196 origin-center"
+    class="relative w-full transition origin-center transform bg-white w-96 h-196"
     :class="{
-      ['scale-95 opacity-30 z-100']: !active,
+      ['scale-95 z-100']: !active,
       ['z-90']: active,
     }"
-    @click="emitActive()"
+    @click="emitActive"
+    ref="root"
   >
-    <slot>
-      <template v-for="(item, i) in page.data" :key="i">
-        <template v-if="item.type === 'image'">
-          <div
-            class="absolute w-full h-full"
-            :style="`background: url(${item.src})`"
-          ></div>
+    <div
+      class="absolute inset-0 w-full h-full bg-black bg-opacity-60 z-101"
+      v-if="!active"
+    ></div>
+
+    <div>
+      <slot>
+        <template v-for="(item, i) in page.data" :key="i">
+          <template v-if="item.type === 'image'">
+            <div
+              class="absolute w-full h-full"
+              :style="`background: url(${item.src})`"
+            ></div>
+          </template>
+          <template v-if="item.type === 'text'">
+            <div class="" v-html="item.value"></div>
+          </template>
+          <div></div>
         </template>
-        <template v-if="item.type === 'text'">
-          <div class="" v-html="item.value"></div>
-        </template>
-        <div></div>
-      </template>
-    </slot>
+      </slot>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import {
+  defineComponent,
+  nextTick,
+  watchEffect,
+  ref,
+  computed,
+  watch,
+} from 'vue'
 import type { IPage } from '~/composable/data/users'
+
+const throttle = <T extends []>(
+  callback: (..._: T) => void,
+  wait: number = 250
+): ((..._: T) => void) => {
+  const next = () => {
+    timeout = clearTimeout(timeout as any) as undefined
+    callback(...lastArgs)
+  }
+  let timeout: number | undefined
+  let lastArgs: T
+
+  return (...args: T) => {
+    lastArgs = args
+
+    if (timeout === void 0) {
+      timeout = setTimeout(next, wait)
+    }
+  }
+}
 
 export default defineComponent({
   props: {
@@ -40,12 +75,27 @@ export default defineComponent({
       default: false,
     },
   },
-  setup({ page }, { emit }) {
-    const emitActive = () => {
-      emit('active', page.id)
+  setup(props, { emit }) {
+    const root = ref<HTMLElement>()
+
+    const isActive = computed(() => props.active)
+
+    const emitActive = (e: Event) => {
+      //const el = e.target as HTMLElement
+
+      emit('active', props.page.id)
+
+      scrollTo()
     }
 
-    return { emitActive }
+    const scrollTo = throttle(() => {
+      if (root.value && !isActive.value) {
+        console.log('scrollto')
+        root.value.scrollIntoView({ behavior: 'smooth', inline: 'center' })
+      }
+    })
+
+    return { root, emitActive }
   },
 })
 </script>
